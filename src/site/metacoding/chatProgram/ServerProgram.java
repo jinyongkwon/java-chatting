@@ -117,6 +117,7 @@ public class ServerProgram {
 			try {
 				username = reader.readLine();
 				for (ClientSocket c : SocketList) {
+					c.writer.write(";" + username);
 					c.writer.write("[" + username + "] 님이 입장하였습니다 .\n");
 					c.writer.flush();
 				}

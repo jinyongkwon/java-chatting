@@ -8,7 +8,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
@@ -84,37 +83,14 @@ public class ClientProgram extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					try {
-						sendMsg = text.getText();
-						if (!sendMsg.equals("")) {
-							writer.write("ALL:" + sendMsg + "\n");
-							writer.flush();
-						}
-						text.setText("");
-						text.requestFocus();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					allSend();
 				}
 			}
 		});
 
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					sendMsg = text.getText();
-					if (!sendMsg.equals("")) {
-						writer.write("ALL:" + sendMsg + "\n");
-						writer.flush();
-					}
-					text.setText("");
-					text.requestFocus();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				// 버퍼에 담긴 것을 stream으로 흘려보내기
+				allSend();
 			}
 		});
 	}
@@ -136,9 +112,8 @@ public class ClientProgram extends JFrame {
 						receiveMsg = reader.readLine();
 						msgList.append(receiveMsg + "\n");
 						msgList.setCaretPosition(msgList.getDocument().getLength());
-						if (receiveMsg.charAt(0) == '[') {
-							String[] token = receiveMsg.split("]");
-							String name = token[0].substring(1, token.length - 1);
+						if (sendMsg.charAt(0) == ';') {
+							String name = sendMsg.substring(1, sendMsg.length());
 							userListModel.addElement(name);
 						}
 					}
@@ -149,6 +124,21 @@ public class ClientProgram extends JFrame {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void allSend() {
+		try {
+			sendMsg = text.getText();
+			if (!sendMsg.equals("")) {
+				writer.write("ALL:" + sendMsg + "\n");
+				writer.flush();
+			}
+			text.setText("");
+			text.requestFocus();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 	}
 
