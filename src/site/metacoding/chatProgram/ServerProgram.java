@@ -116,6 +116,10 @@ public class ServerProgram {
 			// username만 날라오면 세션이 만들어짐.
 			try {
 				username = reader.readLine();
+				for (ClientSocket c : SocketList) {
+					c.writer.write("[" + username + "] 님이 입장하였습니다 .\n");
+					c.writer.flush();
+				}
 			} catch (Exception e2) {
 				isLogin = false;
 				System.out.println("username을 받지 못했습니다.");
